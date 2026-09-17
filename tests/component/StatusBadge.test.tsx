@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { StatusBadge } from "@/components/applications/StatusBadge";
+import { STATUS_COLORS } from "@/lib/constants";
 
 describe("StatusBadge", () => {
   it("renders the human-readable label for a status", () => {
@@ -25,5 +26,23 @@ describe("StatusBadge", () => {
       const { unmount } = render(<StatusBadge status={status} />);
       unmount();
     }
+  });
+
+  it("uses a distinct color for every status", () => {
+    const statuses = [
+      "WISHLIST",
+      "APPLIED",
+      "PHONE_SCREEN",
+      "INTERVIEW",
+      "OFFER",
+      "ACCEPTED",
+      "REJECTED",
+      "WITHDRAWN",
+    ] as const;
+
+    const colors = statuses.map((status) => STATUS_COLORS[status]);
+
+    expect(colors).not.toContain(undefined);
+    expect(new Set(colors).size).toBe(statuses.length);
   });
 });
